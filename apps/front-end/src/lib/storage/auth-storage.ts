@@ -1,4 +1,3 @@
-import secureLocalStorage from "react-secure-storage";
 import type { User } from "@/types/entities";
 
 const ACCESS_TOKEN_KEY = "auth_access_token";
@@ -10,14 +9,15 @@ export interface StoredAuthData {
 }
 
 export function saveAuthData(data: StoredAuthData): void {
-  secureLocalStorage.setItem(ACCESS_TOKEN_KEY, data.accessToken);
-  secureLocalStorage.setItem(USER_KEY, JSON.stringify(data.user));
+  localStorage.setItem(ACCESS_TOKEN_KEY, data.accessToken);
+  localStorage.setItem(USER_KEY, JSON.stringify(data.user));
 }
 
 export function loadAuthData(): StoredAuthData | null {
-  const accessToken = secureLocalStorage.getItem(ACCESS_TOKEN_KEY);
-  const rawUser = secureLocalStorage.getItem(USER_KEY);
-  if (typeof accessToken !== "string" || typeof rawUser !== "string") return null;
+  if (typeof window === "undefined") return null;
+  const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
+  const rawUser = localStorage.getItem(USER_KEY);
+  if (accessToken === null || rawUser === null) return null;
   try {
     return { accessToken, user: JSON.parse(rawUser) as User };
   } catch {
@@ -26,6 +26,6 @@ export function loadAuthData(): StoredAuthData | null {
 }
 
 export function clearAuthData(): void {
-  secureLocalStorage.removeItem(ACCESS_TOKEN_KEY);
-  secureLocalStorage.removeItem(USER_KEY);
+  localStorage.removeItem(ACCESS_TOKEN_KEY);
+  localStorage.removeItem(USER_KEY);
 }

@@ -32,3 +32,5 @@ apps/back-end/uploads/
 
 .claude/
 wiring-vault
+# vercel
+.vercel/
