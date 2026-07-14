@@ -1,0 +1,8 @@
+{
+  "name": "meme-battle-arena",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}

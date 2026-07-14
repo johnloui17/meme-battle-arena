@@ -1,0 +1,1606 @@
+[
+  {
+    "id": "TC001",
+    "title": "Log out and block access to a protected page",
+    "description": "A signed-in user can end the session and is redirected away from protected content when trying to revisit it.",
+    "category": "Session Persistence and Logout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Log out from the home page"
+      },
+      {
+        "type": "action",
+        "description": "Open a protected page from the home page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the login page is shown"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify protected content is not accessible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC002",
+    "title": "Log in and reach the home page",
+    "description": "An existing user can sign in with valid credentials and is returned to the home page in a signed-in state.",
+    "category": "User Login",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user is signed in on the home page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify navigation links to protected areas are available"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC003",
+    "title": "Protected pages redirect signed-out users to login",
+    "description": "This test verifies that a logged-out user cannot open protected areas and is redirected to sign in instead.",
+    "category": "Protected Route Access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /upload"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user is redirected to the login page"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /my-memes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user is redirected to the login page"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /arena"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user is redirected to the login page"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /leaderboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user is redirected to the login page"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "New users can register and reach the home page",
+    "description": "This test verifies that a new user can create an account and land on the authenticated home experience.",
+    "category": "Protected Route Access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /register"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the display name field with a unique name"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with a unique email address"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the registration form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the home page is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the signed-in status block is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "Create a new account and reach the home page",
+    "description": "A new user can register with valid details and is returned to the home page in a signed-in state.",
+    "category": "User Registration",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /register"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the display name field with a new display name"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with a new email address"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with a valid password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the registration form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user is signed in on the home page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify navigation links to protected areas are available"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "Users can log out and lose access to protected pages",
+    "description": "This test verifies that a signed-in user can log out and is then prevented from opening protected areas.",
+    "category": "Protected Route Access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Click the sign-out control"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /arena"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user is redirected to the login page"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC007",
+    "title": "Keep the signed-in state after reloading the home page",
+    "description": "A returning signed-in user stays signed in after a browser reload and still sees protected navigation options.",
+    "category": "Session Persistence and Logout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Reload the page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user is still signed in on the home page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify navigation links to protected areas remain available"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC008",
+    "title": "Signed-in users can reach protected pages from the home page",
+    "description": "This test verifies that a returning signed-in user can access the protected areas through the home page navigation links.",
+    "category": "Protected Route Access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the signed-in status block is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to upload a meme"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the upload page is displayed"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to view the user's memes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user's memes page is displayed"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to enter the arena"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the arena page is displayed"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to view the leaderboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the leaderboard page is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC009",
+    "title": "Signed-in session survives a page reload",
+    "description": "This test verifies that a logged-in user remains signed in after reloading the app.",
+    "category": "Protected Route Access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the page to finish loading"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the signed-in status block is still visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC010",
+    "title": "Signed-in session continues after token refresh",
+    "description": "This test verifies that a returning signed-in user can continue using the app after the access token is refreshed during normal browsing.",
+    "category": "Protected Route Access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /leaderboard"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the page to finish loading"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the leaderboard page is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC011",
+    "title": "Upload a meme with a title and see it in my memes",
+    "description": "A signed-in user can upload a valid meme image with a title and then see it in their personal meme grid.",
+    "category": "Meme Upload",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the upload page"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the meme title field with a new title"
+      },
+      {
+        "type": "action",
+        "description": "Upload a valid meme image file"
+      },
+      {
+        "type": "action",
+        "description": "Submit the upload form"
+      },
+      {
+        "type": "action",
+        "description": "Open the my memes page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the uploaded meme appears in the meme grid"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify meme stats are displayed for the uploaded meme"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC012",
+    "title": "Vote in the arena and see the next matchup",
+    "description": "A signed-in user can choose a meme in the arena and then see the vote reveal and the next matchup appear.",
+    "category": "Arena Voting",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the arena page"
+      },
+      {
+        "type": "action",
+        "description": "Vote for one of the memes in the matchup"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the vote is revealed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the next matchup is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC013",
+    "title": "Users can vote in the arena and see the next matchup",
+    "description": "This test verifies that a user can cast a vote in the arena and the interface advances to the next battle after the reveal.",
+    "category": "arena",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /arena"
+      },
+      {
+        "type": "action",
+        "description": "Select one meme in the current matchup using a click or arrow key"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the chosen meme is highlighted and the reveal is shown"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the next matchup is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC014",
+    "title": "Vote for a meme in an arena matchup",
+    "description": "This test verifies that a signed-in user can enter the arena, choose a winner in a head-to-head matchup, and see the selection reveal and advance to the next battle.",
+    "category": "Arena Voting",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the arena link"
+      },
+      {
+        "type": "action",
+        "description": "Choose a meme in the current matchup"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the chosen meme is highlighted and the next matchup is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC015",
+    "title": "Continue using the app after session refresh during normal use",
+    "description": "A signed-in user can open a protected page after the session has been silently refreshed without being interrupted.",
+    "category": "Session Persistence and Logout",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the session to refresh during normal use"
+      },
+      {
+        "type": "action",
+        "description": "Open a protected area from the home page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the protected page is accessible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the signed-in state remains available"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC016",
+    "title": "Signed-in users can upload a meme and see it in their grid",
+    "description": "This test verifies that a user can upload a valid meme image with a title and later find it in their personal meme grid.",
+    "category": "Meme Upload",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /upload"
+      },
+      {
+        "type": "action",
+        "description": "Add a valid image file using the upload control"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the title field with a unique meme title"
+      },
+      {
+        "type": "action",
+        "description": "Submit the upload form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the upload completes and the user's memes page is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the uploaded meme appears in the user's meme grid"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC017",
+    "title": "Vote in the arena using keyboard controls",
+    "description": "This test verifies that a signed-in user can use the keyboard to select a matchup winner and continue to the next arena round.",
+    "category": "Arena Voting",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the arena link"
+      },
+      {
+        "type": "action",
+        "description": "Press the left or right arrow key to choose a meme"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the selected meme is highlighted and the arena advances to the next matchup"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC018",
+    "title": "Arena voting works with keyboard selection",
+    "description": "This test verifies that a user can vote on an arena matchup using the keyboard and receive the normal post-vote progression.",
+    "category": "arena",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /arena"
+      },
+      {
+        "type": "action",
+        "description": "Press an arrow key to choose a meme"
+      },
+      {
+        "type": "action",
+        "description": "Press Enter to submit the vote"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the selected meme is revealed as the winner or loser"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the arena advances to a new matchup"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC019",
+    "title": "See arena ratings update after a vote",
+    "description": "This test verifies that after voting in the arena, the reveal shows updated ratings and point changes for the matchup outcome.",
+    "category": "Arena Voting",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the arena link"
+      },
+      {
+        "type": "action",
+        "description": "Choose a meme in the current matchup"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the reveal shows updated ratings and point change information"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC020",
+    "title": "Vote in the arena using keyboard input",
+    "description": "A signed-in user can cast an arena vote with the keyboard and see the same post-vote progression as a click vote.",
+    "category": "Arena Voting",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the arena page"
+      },
+      {
+        "type": "action",
+        "description": "Press a voting arrow key"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the vote is revealed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the next matchup is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC021",
+    "title": "Leaderboard shows ranked memes and highlights the current user's entries",
+    "description": "This test verifies that the leaderboard lists memes in rank order and visually marks the signed-in user's memes.",
+    "category": "leaderboard",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /leaderboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the ranked meme table is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the current user's memes are highlighted"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC022",
+    "title": "View leaderboard rankings and meme details",
+    "description": "This test verifies that the leaderboard shows memes ranked by rating and includes the expected row details for each entry.",
+    "category": "Leaderboard Viewing",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the leaderboard link"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify memes are ranked in descending order by rating and each row shows ranking details"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC023",
+    "title": "View the ranked leaderboard and current-user highlighting",
+    "description": "A signed-in user can open the leaderboard and see ranked memes with the current user's own memes highlighted.",
+    "category": "Leaderboard Viewing",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the leaderboard page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify leaderboard rankings are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the current user's memes are highlighted"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC024",
+    "title": "See leaderboard rows include all core meme stats",
+    "description": "This test verifies that each leaderboard row shows the meme thumbnail, rating, wins, and losses alongside its rank and title.",
+    "category": "Leaderboard Viewing",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the leaderboard link"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify leaderboard rows include thumbnails, ratings, wins, and losses"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC025",
+    "title": "Leaderboard displays the main ranking details for each meme",
+    "description": "This test verifies that a signed-in user can inspect the leaderboard and see the core ranking information for listed memes.",
+    "category": "leaderboard",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /leaderboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify ranking order is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify meme details and ratings are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC026",
+    "title": "See the current user's memes highlighted on the leaderboard",
+    "description": "This test verifies that a signed-in user's own uploaded memes are visually distinguished on the leaderboard.",
+    "category": "Leaderboard Viewing",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the leaderboard link"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the current user's memes are highlighted"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC027",
+    "title": "Uploaded meme shows up in the user's grid with stats",
+    "description": "This test verifies that the user can review uploaded memes and see the associated rating and win-loss information.",
+    "category": "My Memes Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /my-memes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user's meme grid is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify meme rating and win-loss stats are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC028",
+    "title": "Users can delete one of their memes after confirming",
+    "description": "This test verifies that a user can remove an owned meme from the grid after confirming the browser prompt.",
+    "category": "My Memes Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /my-memes"
+      },
+      {
+        "type": "action",
+        "description": "Choose one owned meme to delete"
+      },
+      {
+        "type": "action",
+        "description": "Confirm the browser dialog"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the chosen meme is removed from the grid"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC029",
+    "title": "Login rejects invalid credentials",
+    "description": "This test verifies that an invalid sign-in attempt is rejected and the user remains on the login form.",
+    "category": "Protected Route Access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with a fake email address"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with a fake password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a login validation error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the login form is still visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC030",
+    "title": "Reject invalid login credentials",
+    "description": "A user entering invalid credentials sees inline error feedback and remains unauthenticated.",
+    "category": "User Login",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with an unrecognized email address"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with an invalid password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an inline authentication error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user is not signed in"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC031",
+    "title": "Registration enforces a minimum password length",
+    "description": "This test verifies that a new account cannot be created with a password that is too short.",
+    "category": "Protected Route Access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /register"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the display name field with a unique name"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with a unique email address"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with a short password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the registration form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a password validation error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the registration form remains visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC032",
+    "title": "Show the empty arena state when too few memes exist",
+    "description": "A signed-in user sees an empty arena state when there are fewer than two memes available to battle.",
+    "category": "Arena Voting",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the arena page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an empty arena state is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify no matchup is available"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC033",
+    "title": "Reject a too-short password during registration",
+    "description": "A user cannot create an account when the password is shorter than the required minimum and sees inline validation feedback.",
+    "category": "User Registration",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /register"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the display name field with a new display name"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with a new email address"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with a password shorter than the minimum length"
+      },
+      {
+        "type": "action",
+        "description": "Submit the registration form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a password validation error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the account is not created"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC034",
+    "title": "See the arena empty state when not enough memes exist",
+    "description": "This test verifies that the arena shows an empty state prompting the user to upload more memes when fewer than two memes are available.",
+    "category": "Arena Voting",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the arena link"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an empty state message is displayed prompting the user to upload more memes"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC035",
+    "title": "Block oversized meme uploads",
+    "description": "A signed-in user sees validation feedback when trying to upload a file over the size limit and the upload does not complete.",
+    "category": "Meme Upload",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the upload page"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the meme title field with a new title"
+      },
+      {
+        "type": "action",
+        "description": "Upload a file larger than the allowed size"
+      },
+      {
+        "type": "action",
+        "description": "Submit the upload form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a file size validation error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the meme is not added to the account"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC036",
+    "title": "Upload enforces the maximum title length",
+    "description": "This test verifies that the upload form blocks a meme title that exceeds the allowed length.",
+    "category": "Meme Upload",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /upload"
+      },
+      {
+        "type": "action",
+        "description": "Add a valid image file using the upload control"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the title field with a title that exceeds the maximum length"
+      },
+      {
+        "type": "action",
+        "description": "Submit the upload form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a title validation error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the meme is not uploaded"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC037",
+    "title": "Block unsupported files during meme upload",
+    "description": "A signed-in user sees validation feedback when trying to upload a disallowed file type and the meme is not created.",
+    "category": "Meme Upload",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the upload page"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the meme title field with a new title"
+      },
+      {
+        "type": "action",
+        "description": "Upload a file with an unsupported type"
+      },
+      {
+        "type": "action",
+        "description": "Submit the upload form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a file type validation error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the meme is not added to the account"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC038",
+    "title": "Upload rejects a file with an unsupported type",
+    "description": "This test verifies that the upload form blocks a non-image file and shows inline feedback.",
+    "category": "Meme Upload",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /upload"
+      },
+      {
+        "type": "action",
+        "description": "Add a file with a disallowed type using the upload control"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a file type validation error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the file is not accepted for upload"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC039",
+    "title": "Upload rejects a file larger than the allowed size",
+    "description": "This test verifies that the upload form blocks an oversized image and shows inline feedback.",
+    "category": "Meme Upload",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /upload"
+      },
+      {
+        "type": "action",
+        "description": "Add an image file larger than the allowed size using the upload control"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a file size validation error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the file is not accepted for upload"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC040",
+    "title": "Enforce the title length limit during upload",
+    "description": "A signed-in user cannot submit a meme title that exceeds the allowed length and sees inline validation feedback.",
+    "category": "Meme Upload",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the upload page"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the meme title field with a title longer than the allowed maximum"
+      },
+      {
+        "type": "action",
+        "description": "Upload a valid meme image file"
+      },
+      {
+        "type": "action",
+        "description": "Submit the upload form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a title validation error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the meme is not created"
+      }
+    ],
+    "priority": "Low"
+  }
+]

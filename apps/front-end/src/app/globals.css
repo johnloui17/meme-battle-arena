@@ -1,0 +1,10 @@
+@import "tailwindcss";
+@import "@ntrs/core/tokens.css";
+
+/* @ntrs/core owns theming (TECHSPEC.md §9) — scan the packages' compiled JS
+   so Tailwind's JIT compiler picks up the utility classes they reference. */
+@source "../../node_modules/@ntrs";
+
+body {
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
