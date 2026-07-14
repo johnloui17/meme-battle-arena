@@ -8,3 +8,134 @@
 body {
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 }
+
+/* ---------------------------------------------------------------------------
+   MBA design system — global tokens for the Meme Battle Arena look.
+   Dark is the source design (docs/UI-design/index.html); light is derived
+   from the same paper/ink family. Swapped via html[data-theme].
+--------------------------------------------------------------------------- */
+:root,
+html[data-theme="dark"] {
+  --mba-stage: #170d08;
+  --mba-stage-2: #1f120b;
+  --mba-paper: #f3e4c4;
+  --mba-paper-2: #ead9ae;
+  --mba-ink: #2b1b10;
+  --mba-red: #c81d3a;
+  --mba-red-deep: #8b0f26;
+  --mba-teal: #0e7c74;
+  --mba-teal-deep: #075048;
+  --mba-gold: #e8a93b;
+  --mba-gold-deep: #b9791e;
+  --mba-text-hi: #f6ecd9;
+  --mba-text-mid: #c9b79a;
+  --mba-text-dim: #8a7758;
+  --mba-line: rgba(246, 236, 217, 0.1);
+  --mba-line-strong: rgba(246, 236, 217, 0.2);
+  --mba-grain-dot: rgba(255, 255, 255, 0.9);
+  --mba-hud-bg: rgba(23, 13, 8, 0.88);
+  --mba-row-hover: rgba(246, 236, 217, 0.02);
+  --mba-watermark: rgba(246, 236, 217, 0.035);
+}
+
+html[data-theme="light"] {
+  --mba-stage: #f3e4c4;
+  --mba-stage-2: #ead9ae;
+  --mba-paper: #fbf3df;
+  --mba-paper-2: #f3e4c4;
+  --mba-ink: #2b1b10;
+  --mba-red: #c81d3a;
+  --mba-red-deep: #8b0f26;
+  --mba-teal: #0e7c74;
+  --mba-teal-deep: #075048;
+  --mba-gold: #b9791e;
+  --mba-gold-deep: #8f5c14;
+  --mba-text-hi: #2b1b10;
+  --mba-text-mid: #5c4630;
+  --mba-text-dim: #8a7758;
+  --mba-line: rgba(43, 27, 16, 0.12);
+  --mba-line-strong: rgba(43, 27, 16, 0.25);
+  --mba-grain-dot: rgba(43, 27, 16, 0.5);
+  --mba-hud-bg: rgba(243, 228, 196, 0.88);
+  --mba-row-hover: rgba(43, 27, 16, 0.03);
+  --mba-watermark: rgba(43, 27, 16, 0.05);
+}
+
+@theme inline {
+  --color-mba-stage: var(--mba-stage);
+  --color-mba-stage-2: var(--mba-stage-2);
+  --color-mba-paper: var(--mba-paper);
+  --color-mba-paper-2: var(--mba-paper-2);
+  --color-mba-ink: var(--mba-ink);
+  --color-mba-red: var(--mba-red);
+  --color-mba-red-deep: var(--mba-red-deep);
+  --color-mba-teal: var(--mba-teal);
+  --color-mba-teal-deep: var(--mba-teal-deep);
+  --color-mba-gold: var(--mba-gold);
+  --color-mba-gold-deep: var(--mba-gold-deep);
+  --color-mba-text-hi: var(--mba-text-hi);
+  --color-mba-text-mid: var(--mba-text-mid);
+  --color-mba-text-dim: var(--mba-text-dim);
+  --color-mba-line: var(--mba-line);
+  --color-mba-line-strong: var(--mba-line-strong);
+  --font-mba-display: var(--font-baloo), sans-serif;
+  --font-mba-body: var(--font-poppins), sans-serif;
+  --font-mba-mono: var(--font-space-mono), monospace;
+}
+
+/* Pieces Tailwind utilities can't express, scoped under .mba */
+
+.mba ::selection {
+  background: var(--mba-gold);
+  color: var(--mba-ink);
+}
+
+/* film grain / dust overlay (a fixed div inside the page, not body::before) */
+.mba-grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 200;
+  opacity: 0.05;
+  background-image: radial-gradient(var(--mba-grain-dot) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
+
+/* poster halftone texture, used inside cards */
+.mba-halftone {
+  background-image: radial-gradient(rgba(43, 27, 16, 0.1) 1px, transparent 1.2px);
+  background-size: 6px 6px;
+}
+
+/* giant watermark numeral on round cards */
+.mba-round-card::before {
+  content: attr(data-round);
+  position: absolute;
+  top: -14px;
+  right: -6px;
+  font-family: var(--font-baloo), sans-serif;
+  font-weight: 800;
+  font-size: 90px;
+  color: var(--mba-watermark);
+  line-height: 1;
+}
+
+@keyframes mba-flash-pulse {
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mba *,
+  .mba {
+    animation: none !important;
+    transition: none !important;
+  }
+}
