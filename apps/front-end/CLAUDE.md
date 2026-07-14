@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-The Next.js (App Router) frontend for Meme Battle Arena, a learning project (see `../../TECHSPEC.md`, especially §8–9) practicing Redux Toolkit, Tailwind v4, and Storybook-driven widgets on top of App Router. `TECHSPEC.md` is the source of truth for intended behavior — read it before non-trivial changes.
+The Next.js (App Router) frontend for Meme Battle Arena, a learning project (see `../back-end/docs/TECHSPEC.md`, especially §8–9) practicing Redux Toolkit, Tailwind v4, and Storybook-driven widgets on top of App Router. `TECHSPEC.md` is the source of truth for intended behavior — read it before non-trivial changes.
 
 It's part of a yarn workspaces monorepo: this app depends on `@meme-battle-arena/contracts` (shared types/error codes, built separately — see root `CLAUDE.md`) and talks to the Express API in `apps/back-end`.
 

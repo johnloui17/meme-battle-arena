@@ -10,7 +10,7 @@ apps/front-end/    Next.js 16 App Router (port 3000)
 packages/contracts/ Shared types + error codes (@meme-battle-arena/contracts)
 ```
 
-`TECHSPEC.md` is the source of truth for intended behavior. `CLAUDE.md` has architecture details. Read both before non-trivial changes.
+`apps/back-end/docs/TECHSPEC.md` is the source of truth for intended behavior. `CLAUDE.md` has architecture details. Read both before non-trivial changes.
 
 ## Commands
 

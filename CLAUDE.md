@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Meme Battle Arena: users upload memes and vote in head-to-head matchups; an ELO leaderboard ranks them. It's a learning project (see `TECHSPEC.md`) whose real goal is practicing Next.js App Router, Redux Toolkit, Express, Storybook, Tailwind v4, and Docker together per a shared architecture standard. **`TECHSPEC.md` is the source of truth for intended behavior** — read it before making non-trivial changes; this file only covers what the standard checklist items ask for (commands + big-picture architecture).
+Meme Battle Arena: users upload memes and vote in head-to-head matchups; an ELO leaderboard ranks them. It's a learning project (see `apps/back-end/docs/TECHSPEC.md`) whose real goal is practicing Next.js App Router, Redux Toolkit, Express, Storybook, Tailwind v4, and Docker together per a shared architecture standard. **`TECHSPEC.md` is the source of truth for intended behavior** — read it before making non-trivial changes; this file only covers what the standard checklist items ask for (commands + big-picture architecture).
 
 Yarn workspaces monorepo: `apps/back-end` (Express API), `apps/front-end` (Next.js web app), `packages/contracts` (shared types, published as `@meme-battle-arena/contracts`).
 
