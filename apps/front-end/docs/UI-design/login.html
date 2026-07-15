@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log in — Meme Battle Arena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Poppins:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-stage:#170D08;
+    --bg-stage-2:#1F120B;
+    --paper:#F3E4C4;
+    --paper-2:#EAD9AE;
+    --ink:#2B1B10;
+    --red:#C81D3A;
+    --red-deep:#8B0F26;
+    --teal:#0E7C74;
+    --teal-deep:#075048;
+    --gold:#E8A93B;
+    --gold-deep:#B9791E;
+    --text-hi:#F6ECD9;
+    --text-mid:#C9B79A;
+    --text-dim:#8A7758;
+    --line:rgba(246,236,217,0.10);
+    --line-strong:rgba(246,236,217,0.20);
+    --err:#E85C5C;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse 800px 500px at 15% 0%, rgba(200,29,58,0.14), transparent 60%),
+      radial-gradient(ellipse 800px 500px at 85% 10%, rgba(14,124,116,0.16), transparent 60%),
+      var(--bg-stage);
+    color:var(--text-hi);
+    font-family:'Poppins',sans-serif;
+    display:flex;flex-direction:column;
+    position:relative;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:200;opacity:0.05;
+    background-image:radial-gradient(rgba(255,255,255,0.9) 1px, transparent 1px);
+    background-size:3px 3px;
+  }
+
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;}
+
+  /* ---------- NAV ---------- */
+  header{
+    padding:20px 28px;display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid var(--line);
+  }
+  .logo{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:20px;display:flex;align-items:center;gap:8px;}
+  .back-link{
+    font-family:'Space Mono',monospace;font-size:12px;color:var(--text-mid);
+    display:flex;align-items:center;gap:6px;
+    padding:8px 14px;border:1px solid var(--line-strong);border-radius:999px;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .back-link:hover{border-color:var(--text-mid);color:var(--text-hi);}
+
+  /* ---------- MAIN ---------- */
+  main{
+    flex:1;display:flex;align-items:center;justify-content:center;
+    padding:40px 20px 60px;
+  }
+
+  .ticket{
+    display:grid;
+    grid-template-columns:1fr auto;
+    max-width:860px;width:100%;
+    background:var(--paper);
+    border:3px solid var(--ink);
+    border-radius:10px;
+    position:relative;
+    box-shadow:10px 10px 0 var(--red-deep), -10px 0px 0 -6px transparent;
+    color:var(--ink);
+    overflow:visible;
+  }
+
+  /* left: form panel */
+  .ticket-main{padding:44px 46px;}
+
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;
+    color:var(--red-deep);text-transform:uppercase;margin-bottom:14px;
+  }
+  h1{
+    font-family:'Baloo 2',sans-serif;font-weight:800;font-size:32px;
+    letter-spacing:-0.01em;margin-bottom:10px;line-height:1.1;
+  }
+  h1 span{
+    background:linear-gradient(90deg,var(--red),var(--teal));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .lede{color:var(--ink);opacity:0.68;font-size:14.5px;margin-bottom:30px;line-height:1.55;}
+
+  form{display:flex;flex-direction:column;gap:16px;}
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .field label{
+    font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.06em;
+    text-transform:uppercase;color:var(--ink);opacity:0.6;
+  }
+  .input-wrap{position:relative;}
+  .field input{
+    width:100%;padding:13px 14px;border-radius:7px;
+    border:2px solid rgba(43,27,16,0.22);
+    background:rgba(255,255,255,0.5);
+    font-family:'Poppins',sans-serif;font-size:14.5px;color:var(--ink);
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .field input::placeholder{color:rgba(43,27,16,0.35);}
+  .field input:focus{
+    outline:none;border-color:var(--red);background:rgba(255,255,255,0.85);
+  }
+  .toggle-pass{
+    position:absolute;right:12px;top:50%;transform:translateY(-50%);
+    font-family:'Space Mono',monospace;font-size:11px;color:var(--red-deep);
+    background:none;border:none;letter-spacing:0.04em;
+  }
+
+  .row-between{display:flex;align-items:center;justify-content:space-between;font-size:13px;margin-top:-4px;}
+  .remember{display:flex;align-items:center;gap:7px;color:var(--ink);opacity:0.7;font-size:13px;}
+  .remember input{accent-color:var(--red);width:15px;height:15px;}
+  .forgot{font-family:'Space Mono',monospace;font-size:12px;color:var(--red-deep);border-bottom:1px dashed var(--red-deep);}
+  .forgot:hover{opacity:0.8;}
+
+  .btn-submit{
+    margin-top:8px;
+    background:linear-gradient(90deg,var(--red),var(--gold));
+    color:var(--ink);border:2px solid var(--ink);
+    font-family:'Baloo 2',sans-serif;font-weight:700;font-size:17px;
+    padding:14px;border-radius:8px;
+    box-shadow:4px 4px 0 var(--ink);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn-submit:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink);}
+  .btn-submit:active{transform:translate(0,0);box-shadow:2px 2px 0 var(--ink);}
+
+  .divider{display:flex;align-items:center;gap:12px;margin:22px 0 18px;color:var(--ink);opacity:0.45;}
+  .divider::before,.divider::after{content:"";flex:1;height:1px;background:rgba(43,27,16,0.25);}
+  .divider span{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;}
+
+  .btn-oauth{
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    width:100%;padding:12px;border-radius:8px;
+    border:2px solid rgba(43,27,16,0.22);background:rgba(255,255,255,0.4);
+    font-family:'Poppins',sans-serif;font-weight:500;font-size:14px;color:var(--ink);
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .btn-oauth:hover{border-color:rgba(43,27,16,0.4);background:rgba(255,255,255,0.6);}
+
+  .signup-line{
+    text-align:center;margin-top:26px;font-size:13.5px;color:var(--ink);opacity:0.7;
+  }
+  .signup-line a{color:var(--red-deep);font-weight:600;border-bottom:1px dashed var(--red-deep);}
+
+  /* right: stub panel */
+  .ticket-stub{
+    width:190px;
+    border-left:3px dashed rgba(43,27,16,0.35);
+    background:var(--paper-2);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:30px 18px;
+    position:relative;
+    text-align:center;
+  }
+  .stub-notch{
+    position:absolute;left:-13px;width:24px;height:24px;border-radius:50%;
+    background:var(--bg-stage);border:3px solid var(--ink);
+  }
+  .stub-notch.top{top:-13px;}
+  .stub-notch.bottom{bottom:-13px;}
+  .stub-badge{
+    width:70px;height:70px;border-radius:50%;
+    background:radial-gradient(circle, var(--gold), var(--gold-deep));
+    border:3px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Baloo 2',sans-serif;font-weight:800;font-size:26px;color:var(--ink);
+    margin-bottom:16px;
+  }
+  .stub-title{
+    font-family:'Baloo 2',sans-serif;font-weight:700;font-size:16px;margin-bottom:6px;
+  }
+  .stub-sub{
+    font-family:'Space Mono',monospace;font-size:11px;color:var(--ink);opacity:0.55;
+    letter-spacing:0.04em;line-height:1.6;
+  }
+  .stub-rotate{
+    writing-mode:vertical-rl;
+    font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.2em;
+    color:var(--ink);opacity:0.35;text-transform:uppercase;
+    position:absolute;bottom:26px;right:14px;
+  }
+
+  @media (max-width:700px){
+    .ticket{grid-template-columns:1fr;}
+    .ticket-stub{
+      width:100%;border-left:none;border-top:3px dashed rgba(43,27,16,0.35);
+      flex-direction:row;gap:16px;padding:20px 24px;justify-content:center;
+    }
+    .stub-notch{display:none;}
+    .stub-badge{margin-bottom:0;width:50px;height:50px;font-size:18px;}
+    .stub-title,.stub-sub{text-align:left;}
+    .stub-rotate{display:none;}
+    .ticket-main{padding:34px 26px;}
+    h1{font-size:26px;}
+  }
+
+  footer{
+    text-align:center;padding:20px;color:var(--text-dim);
+    font-family:'Space Mono',monospace;font-size:11.5px;
+  }
+
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🎬 Meme Battle Arena</div>
+  <a href="#" class="back-link">← Back to arena</a>
+</header>
+
+<main>
+  <div class="ticket">
+    <div class="ticket-main">
+      <div class="eyebrow">✦ Entry Pass ✦</div>
+      <h1>Get into the <span>arena.</span></h1>
+      <p class="lede">Log in to vote on matchups, upload your own formats, and track your meme's climb up the leaderboard.</p>
+
+      <form>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="you@example.com" />
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="input-wrap">
+            <input type="password" id="password" placeholder="••••••••" />
+            <button type="button" class="toggle-pass" id="togglePass">SHOW</button>
+          </div>
+        </div>
+        <div class="row-between">
+          <label class="remember"><input type="checkbox" /> Keep me logged in</label>
+          <a href="#" class="forgot">Forgot password?</a>
+        </div>
+        <button type="submit" class="btn-submit">Log in →</button>
+      </form>
+
+      <div class="divider"><span>or continue with</span></div>
+      <button type="button" class="btn-oauth">
+        <svg width="17" height="17" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.9-2.26 5.36-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Continue with Google
+      </button>
+
+      <p class="signup-line">New to the arena? <a href="#">Create an account</a></p>
+    </div>
+
+    <div class="ticket-stub">
+      <div class="stub-notch top"></div>
+      <div class="stub-badge">VS</div>
+      <div class="stub-title">Admit One</div>
+      <div class="stub-sub">SHOW #142<br>KERALA / ONLINE</div>
+      <div class="stub-notch bottom"></div>
+      <div class="stub-rotate">MASS ONLY</div>
+    </div>
+  </div>
+</main>
+
+<footer>🎬 MEME BATTLE ARENA — Kerala's own meme leaderboard</footer>
+
+<script>
+  const toggle = document.getElementById('togglePass');
+  const pass = document.getElementById('password');
+  toggle.addEventListener('click', () => {
+    const isPass = pass.type === 'password';
+    pass.type = isPass ? 'text' : 'password';
+    toggle.textContent = isPass ? 'HIDE' : 'SHOW';
+  });
+</script>
+
+</body>
+</html>

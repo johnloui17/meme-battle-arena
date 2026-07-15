@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leaderboard — Meme Battle Arena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Poppins:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-stage:#170D08;
+    --bg-stage-2:#1F120B;
+    --bg-stage-3:#261608;
+    --paper:#F3E4C4;
+    --paper-2:#EAD9AE;
+    --ink:#2B1B10;
+    --red:#C81D3A;
+    --red-deep:#8B0F26;
+    --teal:#0E7C74;
+    --teal-deep:#075048;
+    --gold:#E8A93B;
+    --gold-deep:#B9791E;
+    --silver:#C9B79A;
+    --bronze:#D2795A;
+    --text-hi:#F6ECD9;
+    --text-mid:#C9B79A;
+    --text-dim:#8A7758;
+    --line:rgba(246,236,217,0.10);
+    --line-strong:rgba(246,236,217,0.20);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:
+      radial-gradient(ellipse 800px 500px at 15% 0%, rgba(200,29,58,0.12), transparent 60%),
+      radial-gradient(ellipse 800px 500px at 85% 6%, rgba(14,124,116,0.14), transparent 60%),
+      var(--bg-stage);
+    color:var(--text-hi);
+    font-family:'Poppins',sans-serif;
+    overflow-x:hidden;
+    padding-bottom:100px;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:200;opacity:0.05;
+    background-image:radial-gradient(rgba(255,255,255,0.9) 1px, transparent 1px);
+    background-size:3px 3px;
+  }
+
+  a{color:inherit;text-decoration:none;}
+  button,input{font-family:inherit;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px;}
+  .halftone{
+    background-image:radial-gradient(rgba(43,27,16,0.10) 1px, transparent 1.2px);
+    background-size:6px 6px;
+  }
+
+  /* ---------- NAV ---------- */
+  header.hud{
+    position:sticky;top:0;z-index:100;background:rgba(23,13,8,0.88);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+  }
+  .hud-inner{display:flex;align-items:center;justify-content:space-between;height:66px;}
+  .logo{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:21px;display:flex;align-items:center;gap:10px;}
+  nav.hud-links{display:flex;gap:4px;align-items:center;}
+  nav.hud-links a{
+    font-family:'Baloo 2',sans-serif;font-weight:600;font-size:16px;color:var(--text-mid);
+    padding:8px 16px;border-radius:6px;position:relative;transition:color .15s ease;
+  }
+  nav.hud-links a:hover{color:var(--text-hi);}
+  nav.hud-links a.active{color:var(--gold);}
+  nav.hud-links a.active::after{
+    content:"";position:absolute;left:16px;right:16px;bottom:2px;height:2px;
+    background:linear-gradient(90deg,var(--red),var(--teal));
+  }
+  .tag{
+    display:flex;align-items:center;gap:8px;padding:5px 14px 5px 6px;
+    background:var(--bg-stage-2);border:1px solid var(--line-strong);border-radius:999px;
+  }
+  .tag .dot{
+    width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--teal));
+    flex:none;display:flex;align-items:center;justify-content:center;font-size:11px;
+  }
+  .tag span{font-family:'Space Mono',monospace;font-size:12px;color:var(--text-mid);}
+  .menu-btn{display:none;font-size:22px;color:var(--text-hi);}
+
+  /* ---------- PAGE HERO ---------- */
+  .page-hero{padding:56px 0 40px;text-align:center;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.1em;
+    color:var(--gold);text-transform:uppercase;margin-bottom:16px;
+  }
+  .eyebrow::before,.eyebrow::after{content:"✦";color:var(--text-dim);font-size:10px;}
+  h1{
+    font-family:'Baloo 2',sans-serif;font-weight:800;font-size:clamp(32px,5.5vw,52px);
+    letter-spacing:-0.01em;margin-bottom:14px;
+  }
+  h1 span{
+    background:linear-gradient(90deg,var(--red),var(--gold),var(--teal));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .page-sub{max-width:520px;margin:0 auto;color:var(--text-mid);font-size:15px;line-height:1.6;}
+
+  /* ---------- FILTER BAR ---------- */
+  .filter-bar{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    flex-wrap:wrap;margin:36px 0 30px;
+  }
+  .tabs{
+    display:flex;gap:4px;background:var(--bg-stage-2);border:1px solid var(--line);
+    border-radius:999px;padding:4px;
+  }
+  .tabs button{
+    font-family:'Baloo 2',sans-serif;font-weight:600;font-size:14px;
+    padding:8px 18px;border-radius:999px;color:var(--text-mid);
+    background:none;border:none;cursor:pointer;transition:all .15s ease;
+  }
+  .tabs button.active{background:linear-gradient(90deg,var(--red),var(--gold));color:var(--ink);}
+  .search-wrap{position:relative;flex:1;max-width:260px;min-width:180px;}
+  .search-wrap input{
+    width:100%;padding:10px 14px 10px 36px;border-radius:999px;
+    border:1px solid var(--line-strong);background:var(--bg-stage-2);color:var(--text-hi);
+    font-size:13.5px;
+  }
+  .search-wrap input::placeholder{color:var(--text-dim);}
+  .search-wrap input:focus{outline:none;border-color:var(--gold);}
+  .search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);opacity:0.5;font-size:13px;}
+
+  /* ---------- PODIUM ---------- */
+  .podium{
+    display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:18px;align-items:end;
+    margin-bottom:60px;
+  }
+  .pod-card{
+    background:var(--paper);border:3px solid var(--ink);border-radius:8px;
+    padding:20px 16px 22px;position:relative;text-align:center;color:var(--ink);
+    transition:transform .2s ease;
+  }
+  .pod-card:hover{transform:translateY(-4px);}
+  .pod-card.gold{transform:rotate(0);z-index:2;padding-top:26px;}
+  .pod-card.silver{transform:rotate(-2deg);margin-bottom:26px;}
+  .pod-card.bronze{transform:rotate(2deg);margin-bottom:44px;}
+  .pod-card.silver:hover{transform:rotate(0) translateY(-4px);}
+  .pod-card.bronze:hover{transform:rotate(0) translateY(-4px);}
+
+  .pod-watermark{
+    position:absolute;top:-8px;left:50%;transform:translateX(-50%);
+    font-family:'Baloo 2',sans-serif;font-weight:800;
+    color:rgba(43,27,16,0.08);z-index:0;line-height:1;
+  }
+  .pod-card.gold .pod-watermark{font-size:100px;top:-18px;}
+  .pod-card.silver .pod-watermark, .pod-card.bronze .pod-watermark{font-size:76px;}
+
+  .pod-medal{
+    width:44px;height:44px;border-radius:50%;margin:0 auto 12px;
+    display:flex;align-items:center;justify-content:center;font-size:20px;
+    border:2px solid var(--ink);position:relative;z-index:1;
+  }
+  .pod-card.gold .pod-medal{background:radial-gradient(circle,var(--gold),var(--gold-deep));width:54px;height:54px;font-size:24px;}
+  .pod-card.silver .pod-medal{background:radial-gradient(circle,#e4dcc6,var(--silver));}
+  .pod-card.bronze .pod-medal{background:radial-gradient(circle,#e8a984,var(--bronze));}
+
+  .pod-thumb{
+    width:100%;aspect-ratio:1/1;border-radius:6px;border:2px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;font-size:34px;
+    margin-bottom:14px;position:relative;z-index:1;
+  }
+  .pod-card.gold .pod-thumb{background:linear-gradient(160deg,var(--gold),var(--gold-deep));font-size:44px;}
+  .pod-card.silver .pod-thumb{background:linear-gradient(160deg,var(--teal),var(--teal-deep));}
+  .pod-card.bronze .pod-thumb{background:linear-gradient(160deg,var(--red),var(--red-deep));}
+
+  .pod-name{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:16px;position:relative;z-index:1;}
+  .pod-card.gold .pod-name{font-size:19px;}
+  .pod-by{font-family:'Space Mono',monospace;font-size:11px;opacity:0.55;margin-top:2px;position:relative;z-index:1;}
+  .pod-rating{
+    font-family:'Space Mono',monospace;font-weight:700;font-size:20px;margin-top:12px;
+    position:relative;z-index:1;
+  }
+  .pod-card.gold .pod-rating{color:var(--gold-deep);font-size:24px;}
+  .pod-card.silver .pod-rating{color:#7a6f5a;}
+  .pod-card.bronze .pod-rating{color:var(--red-deep);}
+  .pod-record{font-family:'Space Mono',monospace;font-size:11px;opacity:0.55;margin-top:2px;position:relative;z-index:1;}
+
+  /* ---------- LIST ---------- */
+  .board-panel{background:var(--bg-stage-2);border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+  .board-row{
+    display:grid;grid-template-columns:52px 1fr auto auto auto;align-items:center;
+    gap:16px;padding:15px 22px;border-bottom:1px solid var(--line);transition:background .15s ease;
+  }
+  .board-row:last-child{border-bottom:none;}
+  .board-row:hover{background:rgba(246,236,217,0.025);}
+  .board-row.head{
+    font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);
+    text-transform:uppercase;letter-spacing:0.06em;padding:12px 22px;
+  }
+  .board-row.me{
+    background:rgba(232,169,59,0.06);border-left:3px solid var(--gold);
+    padding-left:19px;
+  }
+  .rank-num{font-family:'Space Mono',monospace;font-weight:700;font-size:15px;color:var(--text-mid);text-align:center;}
+  .meme-cell{display:flex;align-items:center;gap:14px;min-width:0;}
+  .thumb{
+    width:44px;height:44px;border-radius:8px;flex:none;
+    display:flex;align-items:center;justify-content:center;font-size:18px;border:2px solid var(--ink);
+  }
+  .meme-info{min-width:0;}
+  .meme-info b{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:15px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .meme-info span{font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);}
+  .streak{
+    display:flex;align-items:center;gap:4px;font-family:'Space Mono',monospace;font-size:12px;
+    color:var(--text-dim);white-space:nowrap;
+  }
+  .streak.hot{color:var(--red);}
+  .record{font-family:'Space Mono',monospace;font-size:12.5px;color:var(--text-mid);white-space:nowrap;}
+  .rating{font-family:'Space Mono',monospace;font-weight:700;font-size:15.5px;text-align:right;color:var(--text-hi);}
+
+  .load-more{
+    display:block;margin:26px auto 0;
+    font-family:'Baloo 2',sans-serif;font-weight:600;font-size:14.5px;
+    padding:12px 30px;border-radius:999px;border:1px solid var(--line-strong);
+    background:var(--bg-stage-2);color:var(--text-hi);cursor:pointer;
+    transition:border-color .15s ease;
+  }
+  .load-more:hover{border-color:var(--gold);}
+
+  /* ---------- YOUR RANK STICKY ---------- */
+  .your-rank{
+    position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+    background:var(--paper);border:3px solid var(--ink);border-radius:12px;
+    padding:12px 18px;display:flex;align-items:center;gap:16px;
+    box-shadow:6px 6px 0 var(--red-deep);color:var(--ink);z-index:90;
+    max-width:calc(100% - 40px);
+  }
+  .your-rank .yr-label{font-family:'Space Mono',monospace;font-size:10px;opacity:0.55;letter-spacing:0.06em;text-transform:uppercase;}
+  .your-rank .yr-rank{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:20px;color:var(--red-deep);}
+  .your-rank .yr-thumb{
+    width:34px;height:34px;border-radius:7px;border:2px solid var(--ink);
+    background:linear-gradient(160deg,var(--gold),var(--gold-deep));
+    display:flex;align-items:center;justify-content:center;font-size:15px;
+  }
+  .your-rank .yr-name{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:14px;}
+  .your-rank .yr-rating{font-family:'Space Mono',monospace;font-weight:700;font-size:14px;margin-left:auto;}
+
+  @media (max-width:760px){
+    nav.hud-links{display:none;}
+    .menu-btn{display:block;}
+    .podium{grid-template-columns:1fr;gap:14px;}
+    .pod-card.silver,.pod-card.bronze{margin-bottom:0;transform:rotate(0);}
+    .pod-card.gold{order:-1;}
+    .board-row{grid-template-columns:36px 1fr auto;}
+    .streak,.record{display:none;}
+    .your-rank{gap:10px;padding:10px 14px;}
+    .yr-label{display:none;}
+  }
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;}}
+</style>
+</head>
+<body>
+
+<header class="hud">
+  <div class="wrap hud-inner">
+    <div class="logo">🎬 Meme Battle Arena</div>
+    <nav class="hud-links">
+      <a href="#">Arena</a>
+      <a href="#">Upload</a>
+      <a href="#" class="active">Leaderboard</a>
+      <a href="#">My Memes</a>
+    </nav>
+    <div class="tag"><span class="dot">🥭</span><span>LOUI</span></div>
+    <button class="menu-btn">☰</button>
+  </div>
+</header>
+
+<section class="page-hero wrap">
+  <div class="eyebrow">Hall of fame</div>
+  <h1>Who's <span>mass</span> this week?</h1>
+  <p class="page-sub">Every format on this board earned its rank one face-off at a time. No mokka survives to the top.</p>
+</section>
+
+<div class="wrap">
+
+  <div class="filter-bar">
+    <div class="tabs">
+      <button class="active">All Time</button>
+      <button>This Month</button>
+      <button>This Week</button>
+    </div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Search a meme..." />
+    </div>
+  </div>
+
+  <div class="podium">
+    <div class="pod-card silver">
+      <div class="pod-watermark">2</div>
+      <div class="pod-medal">🥈</div>
+      <div class="pod-thumb">🛺</div>
+      <div class="pod-name">Auto U-Turn Uncle</div>
+      <div class="pod-by">by sam</div>
+      <div class="pod-rating">1198</div>
+      <div class="pod-record">11W – 9L</div>
+    </div>
+
+    <div class="pod-card gold">
+      <div class="pod-watermark">1</div>
+      <div class="pod-medal">🥇</div>
+      <div class="pod-thumb">🍛</div>
+      <div class="pod-name">Onam Sadya Uncle</div>
+      <div class="pod-by">by loui</div>
+      <div class="pod-rating">1240</div>
+      <div class="pod-record">18W – 7L</div>
+    </div>
+
+    <div class="pod-card bronze">
+      <div class="pod-watermark">3</div>
+      <div class="pod-medal">🥉</div>
+      <div class="pod-thumb">🚦</div>
+      <div class="pod-name">Traffic Jam Philosopher</div>
+      <div class="pod-by">by kochi_dev</div>
+      <div class="pod-rating">1151</div>
+      <div class="pod-record">9W – 6L</div>
+    </div>
+  </div>
+
+  <div class="board-panel">
+    <div class="board-row head">
+      <span>#</span><span>Meme</span><span>Streak</span><span>Record</span><span style="text-align:right">Rating</span>
+    </div>
+
+    <div class="board-row">
+      <div class="rank-num">4</div>
+      <div class="meme-cell">
+        <div class="thumb" style="background:linear-gradient(160deg,#5a4a2b,#2b2110);">🎧</div>
+        <div class="meme-info"><b>Wedding Video DJ Uncle</b><span>by anoop_r</span></div>
+      </div>
+      <div class="streak hot">🔥 4W</div>
+      <div class="record">14W – 10L</div>
+      <div class="rating">1122</div>
+    </div>
+
+    <div class="board-row">
+      <div class="rank-num">5</div>
+      <div class="meme-cell">
+        <div class="thumb" style="background:linear-gradient(160deg,var(--teal),var(--teal-deep));">☔</div>
+        <div class="meme-info"><b>Flood Season Optimist</b><span>by reshma.k</span></div>
+      </div>
+      <div class="streak">2W</div>
+      <div class="record">12W – 11L</div>
+      <div class="rating">1098</div>
+    </div>
+
+    <div class="board-row me">
+      <div class="rank-num">6</div>
+      <div class="meme-cell">
+        <div class="thumb" style="background:linear-gradient(160deg,var(--red),var(--red-deep));">📚</div>
+        <div class="meme-info"><b>WhatsApp University Professor</b><span>by loui · you</span></div>
+      </div>
+      <div class="streak hot">🔥 3W</div>
+      <div class="record">10W – 8L</div>
+      <div class="rating">1076</div>
+    </div>
+
+    <div class="board-row">
+      <div class="rank-num">7</div>
+      <div class="meme-cell">
+        <div class="thumb" style="background:linear-gradient(160deg,#7a5a2b,#3b2b10);">✈️</div>
+        <div class="meme-info"><b>Gulf Return Uncle</b><span>by fasil.m</span></div>
+      </div>
+      <div class="streak">1L</div>
+      <div class="record">13W – 15L</div>
+      <div class="rating">1054</div>
+    </div>
+
+    <div class="board-row">
+      <div class="rank-num">8</div>
+      <div class="meme-cell">
+        <div class="thumb" style="background:linear-gradient(160deg,#5a2130,#2b0f16);">🚇</div>
+        <div class="meme-info"><b>Metro Selfie Squad</b><span>by devika_s</span></div>
+      </div>
+      <div class="streak">2L</div>
+      <div class="record">8W – 9L</div>
+      <div class="rating">1021</div>
+    </div>
+
+    <div class="board-row">
+      <div class="rank-num">9</div>
+      <div class="meme-cell">
+        <div class="thumb" style="background:linear-gradient(160deg,var(--gold),var(--gold-deep));">⚽</div>
+        <div class="meme-info"><b>Sunday Football Tactics Uncle</b><span>by jithin.p</span></div>
+      </div>
+      <div class="streak">1W</div>
+      <div class="record">7W – 8L</div>
+      <div class="rating">998</div>
+    </div>
+
+    <div class="board-row">
+      <div class="rank-num">10</div>
+      <div class="meme-cell">
+        <div class="thumb" style="background:linear-gradient(160deg,#3a3a3a,#1a1a1a);">☕</div>
+        <div class="meme-info"><b>Coffee House Debate Guy</b><span>by nithin.v</span></div>
+      </div>
+      <div class="streak">3L</div>
+      <div class="record">6W – 10L</div>
+      <div class="rating">962</div>
+    </div>
+  </div>
+
+  <button class="load-more">Show more formats</button>
+</div>
+
+<div class="your-rank">
+  <div class="yr-thumb">📚</div>
+  <div>
+    <div class="yr-label">Your best format</div>
+    <div class="yr-name">WhatsApp University Professor</div>
+  </div>
+  <div class="yr-rank">#6</div>
+  <div class="yr-rating">1076</div>
+</div>
+
+<script>
+  document.querySelectorAll('.tabs button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>

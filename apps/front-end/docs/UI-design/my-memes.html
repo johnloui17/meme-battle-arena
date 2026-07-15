@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Memes — Meme Battle Arena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Poppins:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-stage:#170D08;
+    --bg-stage-2:#1F120B;
+    --paper:#F3E4C4;
+    --paper-2:#EAD9AE;
+    --ink:#2B1B10;
+    --red:#C81D3A;
+    --red-deep:#8B0F26;
+    --teal:#0E7C74;
+    --teal-deep:#075048;
+    --gold:#E8A93B;
+    --gold-deep:#B9791E;
+    --text-hi:#F6ECD9;
+    --text-mid:#C9B79A;
+    --text-dim:#8A7758;
+    --line:rgba(246,236,217,0.10);
+    --line-strong:rgba(246,236,217,0.20);
+    --up:#5BAE6E;
+    --down:#D2664F;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:
+      radial-gradient(ellipse 800px 500px at 15% 0%, rgba(200,29,58,0.12), transparent 60%),
+      radial-gradient(ellipse 800px 500px at 85% 6%, rgba(14,124,116,0.14), transparent 60%),
+      var(--bg-stage);
+    color:var(--text-hi);
+    font-family:'Poppins',sans-serif;
+    overflow-x:hidden;
+    padding-bottom:60px;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:200;opacity:0.05;
+    background-image:radial-gradient(rgba(255,255,255,0.9) 1px, transparent 1px);
+    background-size:3px 3px;
+  }
+
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+  .halftone{
+    background-image:radial-gradient(rgba(43,27,16,0.10) 1px, transparent 1.2px);
+    background-size:6px 6px;
+  }
+
+  /* ---------- NAV ---------- */
+  header.hud{
+    position:sticky;top:0;z-index:100;background:rgba(23,13,8,0.88);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+  }
+  .hud-inner{display:flex;align-items:center;justify-content:space-between;height:66px;}
+  .logo{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:21px;display:flex;align-items:center;gap:10px;}
+  nav.hud-links{display:flex;gap:4px;align-items:center;}
+  nav.hud-links a{
+    font-family:'Baloo 2',sans-serif;font-weight:600;font-size:16px;color:var(--text-mid);
+    padding:8px 16px;border-radius:6px;position:relative;transition:color .15s ease;
+  }
+  nav.hud-links a:hover{color:var(--text-hi);}
+  nav.hud-links a.active{color:var(--gold);}
+  nav.hud-links a.active::after{
+    content:"";position:absolute;left:16px;right:16px;bottom:2px;height:2px;
+    background:linear-gradient(90deg,var(--red),var(--teal));
+  }
+  .tag{
+    display:flex;align-items:center;gap:8px;padding:5px 14px 5px 6px;
+    background:var(--bg-stage-2);border:1px solid var(--line-strong);border-radius:999px;
+  }
+  .tag .dot{
+    width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--teal));
+    flex:none;display:flex;align-items:center;justify-content:center;font-size:11px;
+  }
+  .tag span{font-family:'Space Mono',monospace;font-size:12px;color:var(--text-mid);}
+  .menu-btn{display:none;font-size:22px;color:var(--text-hi);}
+
+  /* ---------- PAGE HERO ---------- */
+  .page-hero{padding:52px 0 8px;display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.1em;
+    color:var(--gold);text-transform:uppercase;margin-bottom:14px;
+  }
+  .eyebrow::before,.eyebrow::after{content:"✦";color:var(--text-dim);font-size:10px;}
+  h1{
+    font-family:'Baloo 2',sans-serif;font-weight:800;font-size:clamp(30px,5vw,46px);
+    letter-spacing:-0.01em;margin-bottom:8px;
+  }
+  h1 span{
+    background:linear-gradient(90deg,var(--red),var(--gold),var(--teal));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .page-sub{color:var(--text-mid);font-size:14.5px;max-width:440px;}
+  .btn-upload{
+    font-family:'Baloo 2',sans-serif;font-weight:700;font-size:15px;
+    padding:13px 26px;border-radius:8px;color:var(--ink);
+    background:linear-gradient(90deg,var(--red),var(--gold));
+    border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink);
+    transition:transform .12s ease, box-shadow .12s ease;
+    white-space:nowrap;
+  }
+  .btn-upload:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink);}
+
+  /* ---------- STATS ROW ---------- */
+  .stats-row{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+    margin:36px 0 46px;
+  }
+  .stat-card{
+    background:var(--bg-stage-2);border:1px solid var(--line);border-radius:12px;
+    padding:20px 22px;position:relative;overflow:hidden;
+  }
+  .stat-card::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  }
+  .stat-card.c1::before{background:var(--gold);}
+  .stat-card.c2::before{background:var(--red);}
+  .stat-card.c3::before{background:var(--teal);}
+  .stat-card.c4::before{background:linear-gradient(90deg,var(--red),var(--teal));}
+  .stat-label{
+    font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.06em;
+    text-transform:uppercase;color:var(--text-dim);margin-bottom:10px;
+  }
+  .stat-value{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:28px;}
+  .stat-value.gold{color:var(--gold);}
+  .stat-sub{font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);margin-top:4px;}
+
+  /* ---------- FILTER BAR ---------- */
+  .filter-bar{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    flex-wrap:wrap;margin-bottom:26px;
+  }
+  .tabs{
+    display:flex;gap:4px;background:var(--bg-stage-2);border:1px solid var(--line);
+    border-radius:999px;padding:4px;
+  }
+  .tabs button{
+    font-family:'Baloo 2',sans-serif;font-weight:600;font-size:13.5px;
+    padding:8px 16px;border-radius:999px;color:var(--text-mid);
+    background:none;border:none;transition:all .15s ease;
+  }
+  .tabs button.active{background:linear-gradient(90deg,var(--red),var(--gold));color:var(--ink);}
+  .sort-select{
+    font-family:'Space Mono',monospace;font-size:12.5px;color:var(--text-hi);
+    background:var(--bg-stage-2);border:1px solid var(--line-strong);border-radius:999px;
+    padding:9px 16px;
+  }
+
+  /* ---------- GRID ---------- */
+  .meme-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:22px;
+  }
+
+  .meme-card{
+    background:var(--paper);border:3px solid var(--ink);border-radius:8px;
+    padding:16px;color:var(--ink);position:relative;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .meme-card:hover{transform:translateY(-4px);box-shadow:6px 6px 0 var(--red-deep);}
+  .meme-card:nth-child(3n+2){transform:rotate(-1deg);}
+  .meme-card:nth-child(3n+2):hover{transform:rotate(0) translateY(-4px);}
+  .meme-card:nth-child(3n){transform:rotate(1deg);}
+  .meme-card:nth-child(3n):hover{transform:rotate(0) translateY(-4px);}
+
+  .rank-chip{
+    position:absolute;top:-10px;left:14px;
+    font-family:'Space Mono',monospace;font-size:11px;font-weight:700;
+    background:var(--ink);color:var(--paper);padding:3px 10px;border-radius:999px;
+    letter-spacing:0.04em;
+  }
+  .rank-chip.top{background:var(--gold-deep);}
+
+  .card-thumb{
+    width:100%;aspect-ratio:1/1;border-radius:6px;border:2px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;font-size:40px;
+    margin-bottom:14px;position:relative;
+  }
+  .card-name{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:17px;margin-bottom:2px;}
+  .card-date{font-family:'Space Mono',monospace;font-size:11px;opacity:0.5;margin-bottom:14px;}
+
+  .card-rating-row{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px;}
+  .card-rating{font-family:'Space Mono',monospace;font-weight:700;font-size:22px;}
+  .trend{
+    font-family:'Space Mono',monospace;font-size:12px;font-weight:700;
+    display:flex;align-items:center;gap:3px;
+  }
+  .trend.up{color:var(--up);}
+  .trend.down{color:var(--down);}
+  .trend.flat{color:var(--text-dim);}
+
+  .card-bar{height:6px;border-radius:3px;background:rgba(43,27,16,0.15);overflow:hidden;margin-bottom:12px;}
+  .card-bar-fill{height:100%;border-radius:3px;}
+
+  .card-meta{
+    display:flex;justify-content:space-between;font-family:'Space Mono',monospace;
+    font-size:11.5px;opacity:0.65;margin-bottom:16px;
+  }
+
+  .card-actions{display:flex;gap:8px;}
+  .card-actions button{
+    flex:1;font-family:'Baloo 2',sans-serif;font-weight:600;font-size:13px;
+    padding:9px;border-radius:6px;border:2px solid var(--ink);
+  }
+  .btn-stats{background:var(--ink);color:var(--paper);}
+  .btn-stats:hover{background:#3a2818;}
+  .btn-delete{background:none;color:var(--ink);opacity:0.55;}
+  .btn-delete:hover{opacity:1;border-color:var(--red-deep);color:var(--red-deep);}
+
+  /* ---------- ADD NEW SLOT ---------- */
+  .add-card{
+    border:3px dashed rgba(246,236,217,0.25);border-radius:8px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:10px;padding:30px 16px;min-height:100%;text-align:center;
+    color:var(--text-dim);transition:border-color .15s ease, color .15s ease;
+  }
+  .add-card:hover{border-color:var(--gold);color:var(--gold);}
+  .add-icon{
+    width:52px;height:52px;border-radius:50%;border:2px dashed currentColor;
+    display:flex;align-items:center;justify-content:center;font-size:22px;
+  }
+  .add-card b{font-family:'Baloo 2',sans-serif;font-size:15px;color:inherit;}
+  .add-card span{font-family:'Space Mono',monospace;font-size:11.5px;}
+
+  @media (max-width:900px){
+    .meme-grid{grid-template-columns:repeat(2,1fr);}
+    .stats-row{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:760px){
+    nav.hud-links{display:none;}
+    .menu-btn{display:block;}
+  }
+  @media (max-width:560px){
+    .meme-grid{grid-template-columns:1fr;}
+    .stats-row{grid-template-columns:1fr 1fr;}
+    .meme-card:nth-child(n){transform:rotate(0) !important;}
+  }
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;}}
+</style>
+</head>
+<body>
+
+<header class="hud">
+  <div class="wrap hud-inner">
+    <div class="logo">🎬 Meme Battle Arena</div>
+    <nav class="hud-links">
+      <a href="#">Arena</a>
+      <a href="#">Upload</a>
+      <a href="#">Leaderboard</a>
+      <a href="#" class="active">My Memes</a>
+    </nav>
+    <div class="tag"><span class="dot">🥭</span><span>LOUI</span></div>
+    <button class="menu-btn">☰</button>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="page-hero">
+    <div>
+      <div class="eyebrow">Your roster</div>
+      <h1>Your formats <span>in the ring.</span></h1>
+      <p class="page-sub">Every meme you've thrown into the arena, its live rating, and how it's trending this week.</p>
+    </div>
+    <button class="btn-upload">+ Upload a meme</button>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card c1">
+      <div class="stat-label">Best rank</div>
+      <div class="stat-value gold">#6</div>
+      <div class="stat-sub">WhatsApp University Professor</div>
+    </div>
+    <div class="stat-card c2">
+      <div class="stat-label">Total formats</div>
+      <div class="stat-value">5</div>
+      <div class="stat-sub">2 uploaded this month</div>
+    </div>
+    <div class="stat-card c3">
+      <div class="stat-label">Win rate</div>
+      <div class="stat-value">58%</div>
+      <div class="stat-sub">63W – 46L overall</div>
+    </div>
+    <div class="stat-card c4">
+      <div class="stat-label">Votes received</div>
+      <div class="stat-value">1,842</div>
+      <div class="stat-sub">+126 this week</div>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <div class="tabs">
+      <button class="active">All (5)</button>
+      <button>Rising</button>
+      <button>Falling</button>
+    </div>
+    <select class="sort-select">
+      <option>Sort: Highest rating</option>
+      <option>Sort: Most recent</option>
+      <option>Sort: Most votes</option>
+    </select>
+  </div>
+
+  <div class="meme-grid">
+
+    <div class="meme-card">
+      <div class="rank-chip top">RANK #6</div>
+      <div class="card-thumb" style="background:linear-gradient(160deg,var(--red),var(--red-deep));color:var(--paper);">📚</div>
+      <div class="card-name">WhatsApp University Professor</div>
+      <div class="card-date">Uploaded 12 days ago</div>
+      <div class="card-rating-row">
+        <div class="card-rating">1076</div>
+        <div class="trend up">▲ 24</div>
+      </div>
+      <div class="card-bar"><div class="card-bar-fill" style="width:64%;background:linear-gradient(90deg,var(--red-deep),var(--red));"></div></div>
+      <div class="card-meta"><span>10W – 8L</span><span>🔥 3 win streak</span></div>
+      <div class="card-actions">
+        <button class="btn-stats">View stats</button>
+        <button class="btn-delete">Remove</button>
+      </div>
+    </div>
+
+    <div class="meme-card">
+      <div class="rank-chip">RANK #19</div>
+      <div class="card-thumb" style="background:linear-gradient(160deg,var(--teal),var(--teal-deep));color:var(--paper);">🥥</div>
+      <div class="card-name">Coconut Tree WiFi Guy</div>
+      <div class="card-date">Uploaded 3 days ago</div>
+      <div class="card-rating-row">
+        <div class="card-rating">941</div>
+        <div class="trend up">▲ 38</div>
+      </div>
+      <div class="card-bar"><div class="card-bar-fill" style="width:41%;background:linear-gradient(90deg,var(--teal-deep),var(--teal));"></div></div>
+      <div class="card-meta"><span>4W – 2L</span><span>New entry</span></div>
+      <div class="card-actions">
+        <button class="btn-stats">View stats</button>
+        <button class="btn-delete">Remove</button>
+      </div>
+    </div>
+
+    <div class="meme-card">
+      <div class="rank-chip">RANK #27</div>
+      <div class="card-thumb" style="background:linear-gradient(160deg,var(--gold),var(--gold-deep));color:var(--ink);">☂️</div>
+      <div class="card-name">Monsoon Umbrella Fail</div>
+      <div class="card-date">Uploaded 21 days ago</div>
+      <div class="card-rating-row">
+        <div class="card-rating">887</div>
+        <div class="trend down">▼ 12</div>
+      </div>
+      <div class="card-bar"><div class="card-bar-fill" style="width:33%;background:linear-gradient(90deg,var(--red-deep),var(--red));"></div></div>
+      <div class="card-meta"><span>9W – 13L</span><span>2 loss streak</span></div>
+      <div class="card-actions">
+        <button class="btn-stats">View stats</button>
+        <button class="btn-delete">Remove</button>
+      </div>
+    </div>
+
+    <div class="meme-card">
+      <div class="rank-chip">RANK #34</div>
+      <div class="card-thumb" style="background:linear-gradient(160deg,#5a4a2b,#2b2110);color:var(--paper);">🏏</div>
+      <div class="card-name">Gully Cricket Umpire</div>
+      <div class="card-date">Uploaded 40 days ago</div>
+      <div class="card-rating-row">
+        <div class="card-rating">812</div>
+        <div class="trend flat">— 0</div>
+      </div>
+      <div class="card-bar"><div class="card-bar-fill" style="width:22%;background:linear-gradient(90deg,var(--teal-deep),var(--teal));"></div></div>
+      <div class="card-meta"><span>15W – 19L</span><span>Steady</span></div>
+      <div class="card-actions">
+        <button class="btn-stats">View stats</button>
+        <button class="btn-delete">Remove</button>
+      </div>
+    </div>
+
+    <div class="meme-card">
+      <div class="rank-chip">RANK #41</div>
+      <div class="card-thumb" style="background:linear-gradient(160deg,#5a2130,#2b0f16);color:var(--paper);">🚌</div>
+      <div class="card-name">KSRTC Sleeper Dreams</div>
+      <div class="card-date">Uploaded 2 months ago</div>
+      <div class="card-rating-row">
+        <div class="card-rating">764</div>
+        <div class="trend down">▼ 31</div>
+      </div>
+      <div class="card-bar"><div class="card-bar-fill" style="width:14%;background:linear-gradient(90deg,var(--red-deep),var(--red));"></div></div>
+      <div class="card-meta"><span>25W – 34L</span><span>4 loss streak</span></div>
+      <div class="card-actions">
+        <button class="btn-stats">View stats</button>
+        <button class="btn-delete">Remove</button>
+      </div>
+    </div>
+
+    <div class="add-card">
+      <div class="add-icon">+</div>
+      <b>Throw in a new one</b>
+      <span>Upload a format</span>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.tabs button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
