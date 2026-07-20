@@ -2,19 +2,12 @@
 
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { SiteHeader } from "@/components/shell/site-header";
 import { useLanding, type FighterSide } from "./index.hook";
 
-const WRAP = "max-w-[1180px] mx-auto px-[28px]";
 // In the source design, each section's own `padding` shorthand overrides
 // .wrap's horizontal padding, so sections span the full 1180px.
 const WRAP_BARE = "max-w-[1180px] mx-auto";
-
-const NAV_LINKS = [
-  { label: "Arena", href: "/arena", active: true },
-  { label: "Upload", href: "/upload", active: false },
-  { label: "Leaderboard", href: "/leaderboard", active: false },
-  { label: "My Memes", href: "/my-memes", active: false },
-];
 
 const FIGHTERS = {
   p1: {
@@ -198,92 +191,14 @@ function Fighter({
 }
 
 export default function LandingLayout() {
-  const { userName, selected, flash, barsFilled, vote, theme, setTheme, settingsOpen, setSettingsOpen } =
-    useLanding();
+  const { selected, flash, barsFilled, vote } = useLanding();
 
   return (
     <div className="mba relative min-h-screen w-full overflow-x-hidden font-mba-body leading-[normal] text-mba-text-hi [background:radial-gradient(ellipse_800px_500px_at_15%_0%,rgba(200,29,58,0.14),transparent_60%),radial-gradient(ellipse_800px_500px_at_85%_10%,rgba(14,124,116,0.16),transparent_60%),var(--mba-stage)]">
       <div className="mba-grain" aria-hidden />
 
       {/* ---------- NAV ---------- */}
-      <header className="sticky top-0 z-[100] border-b border-mba-line bg-[var(--mba-hud-bg)] backdrop-blur-[10px]">
-        <div className={cn(WRAP, "flex h-[66px] items-center justify-between")}>
-          <div className="flex flex-none items-center gap-[10px] whitespace-nowrap font-mba-display text-[21px] font-extrabold tracking-[0.01em]">
-            🎬 Meme Battle Arena
-          </div>
-          <nav className="flex items-center gap-1 max-[820px]:hidden">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className={cn(
-                  "relative rounded-[6px] px-4 py-2 font-mba-display text-[16px] font-semibold transition-colors duration-150",
-                  link.active
-                    ? "text-mba-gold after:absolute after:bottom-[2px] after:left-4 after:right-4 after:h-[2px] after:bg-[linear-gradient(90deg,var(--mba-red),var(--mba-teal))] after:content-['']"
-                    : "text-mba-text-mid hover:text-mba-text-hi"
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-          <div className="flex items-center gap-2">
-            {userName ? (
-              <div className="flex items-center gap-2 rounded-full border border-mba-line-strong bg-mba-stage-2 py-[5px] pl-[6px] pr-[14px]">
-                <span className="flex h-[22px] w-[22px] flex-none items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--mba-red),var(--mba-teal))] text-[11px]">
-                  🥭
-                </span>
-                <span className="font-mba-mono text-[12px] text-mba-text-mid">{userName.toUpperCase()}</span>
-              </div>
-            ) : (
-              <Link
-                href="/login"
-                className="flex items-center gap-2 rounded-full border border-mba-line-strong bg-mba-stage-2 py-[5px] pl-[6px] pr-[14px]"
-              >
-                <span className="flex h-[22px] w-[22px] flex-none items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--mba-red),var(--mba-teal))] text-[11px]">
-                  🥭
-                </span>
-                <span className="font-mba-mono text-[12px] text-mba-text-mid">LOGIN</span>
-              </Link>
-            )}
-            {/* settings: theme switch (hidden on mobile — the 66px HUD can't fit it) */}
-            <div className="relative max-[820px]:hidden">
-              <button
-                aria-label="Settings"
-                onClick={() => setSettingsOpen(!settingsOpen)}
-                className="rounded-[6px] px-2 py-2 text-[16px] text-mba-text-mid transition-colors duration-150 hover:text-mba-text-hi"
-              >
-                ⚙
-              </button>
-              {settingsOpen && (
-                <div className="absolute right-0 top-full z-[110] mt-2 flex w-[140px] flex-col gap-1 rounded-[8px] border border-mba-line-strong bg-mba-stage-2 p-2">
-                  <div className="px-3 py-1 font-mba-mono text-[10px] uppercase tracking-[0.06em] text-mba-text-dim">
-                    Theme
-                  </div>
-                  {(["dark", "light"] as const).map((option) => (
-                    <button
-                      key={option}
-                      onClick={() => {
-                        setTheme(option);
-                        setSettingsOpen(false);
-                      }}
-                      className={cn(
-                        "rounded-[6px] px-3 py-1.5 text-left font-mba-mono text-[12px] capitalize transition-colors duration-150 hover:bg-[var(--mba-row-hover)]",
-                        theme === option ? "text-mba-gold" : "text-mba-text-mid"
-                      )}
-                    >
-                      {option === "dark" ? "🌙 Dark" : "☀️ Light"}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-            <button className="hidden text-[22px] text-mba-text-hi max-[820px]:block" aria-label="Menu">
-              ☰
-            </button>
-          </div>
-        </div>
-      </header>
+      <SiteHeader active="arena" />
 
       {/* ---------- HERO ---------- */}
       <section className={cn(WRAP_BARE, "relative pb-9 pt-[70px] text-center")}>

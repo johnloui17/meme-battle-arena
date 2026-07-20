@@ -21,7 +21,16 @@ export function createApp() {
   app.use(express.json({ limit: "1mb" }));
   app.use(cookieParser());
   app.use(requestContext);
-  app.use("/uploads", express.static(UPLOADS_DIR, { maxAge: "1y", immutable: true }));
+  app.use(
+    "/uploads",
+    express.static(UPLOADS_DIR, {
+      maxAge: "1y",
+      immutable: true,
+      // helmet defaults to CORP same-origin, which blocks the web app (a
+      // different origin in dev) from embedding these images.
+      setHeaders: (res) => res.setHeader("Cross-Origin-Resource-Policy", "cross-origin"),
+    })
+  );
 
   app.use(`${BASE_PATH}/auth`, authRoutes);
   app.use(`${BASE_PATH}/memes`, memeRoutes);

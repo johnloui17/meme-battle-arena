@@ -170,7 +170,8 @@ Base path `/api/v1`. Error envelope, pagination envelope, snake_case, and the to
 | `DELETE /memes/:id` | ✅ owner | soft delete (`status='deleted'`); meme leaves the arena & leaderboard, past votes stand |
 | `POST /battles/next` | ✅ | deal a matchup → 200 Matchup (POST: it creates a row) |
 | `POST /battles/:matchup_id/vote` | ✅ | `{ winner_meme_id }` → vote result (below) |
-| `GET /leaderboard` | ✅ | paginated memes, `ORDER BY rating DESC`; rank included |
+| `GET /leaderboard` | ✅ | paginated; `?period=all\|month\|week` (week/month rank by net rating change in the trailing 7/30 days, only memes with ≥1 vote in the window), `?q=` title search (rows keep their true rank), per-row streak included |
+| `GET /leaderboard/me` | ✅ | `{ data: LeaderboardEntry \| null }` — the caller's best-ranked meme on the requested `?period=` board (fuels the sticky "your best format" bar) |
 | `GET /health` | — | `{ status: "ok" }` |
 
 Uploaded images are served statically at `GET /uploads/<file>` (see §7.3).
@@ -193,8 +194,11 @@ Uploaded images are served statically at `GET /uploads/<file>` (see §7.3).
 }
 
 // Leaderboard row — GET /leaderboard
+// wins/losses are the requested period's record (all-time when period=all);
+// streak is always recent form (consecutive latest outcomes, 20-vote lookback), null when unvoted
 { "rank": 1, "id": "…", "title": "…", "image_url": "…", "rating": 1493,
-  "wins": 41, "losses": 12, "uploader": { "id": "…", "display_name": "…" } }
+  "wins": 41, "losses": 12, "streak": { "outcome": "W", "count": 4 },
+  "uploader": { "id": "…", "display_name": "…" } }
 ```
 
 ### 5.3 Error codes (`packages/contracts/src/error-codes.ts`)
