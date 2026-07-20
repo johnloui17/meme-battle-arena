@@ -19,6 +19,7 @@ export const API_ENDPOINTS = {
   },
   LEADERBOARD: {
     LIST: `${BASE_PATH}/leaderboard`,
+    ME: `${BASE_PATH}/leaderboard/me`,
   },
 } as const;
 
