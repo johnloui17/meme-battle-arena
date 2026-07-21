@@ -28,6 +28,22 @@ export const authController = {
     res.json({ access_token: accessToken, user });
   }),
 
+  google: asyncHandler(async (req, res) => {
+    const { user, accessToken, refreshToken } = await authService.googleLogin(req.body.code);
+    res.cookie(REFRESH_COOKIE, refreshToken, refreshCookieOptions);
+    res.json({ access_token: accessToken, user });
+  }),
+
+  forgotPassword: asyncHandler(async (req, res) => {
+    await authService.forgotPassword(req.body.email);
+    res.json({ sent: true });
+  }),
+
+  resetPassword: asyncHandler(async (req, res) => {
+    await authService.resetPassword(req.body.token, req.body.password);
+    res.json({ reset: true });
+  }),
+
   refresh: asyncHandler(async (req, res) => {
     const token = req.cookies[REFRESH_COOKIE];
     if (!token) throw new ApiError(ERROR_CODES.TOKEN_MISSING, 401);

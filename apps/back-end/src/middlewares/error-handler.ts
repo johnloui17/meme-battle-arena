@@ -6,7 +6,10 @@ import { logger } from "../lib/logger";
 
 export function errorHandler(err: unknown, req: Request, res: Response, _next: NextFunction) {
   if (err instanceof ApiError) {
-    return res.status(err.status).json({ error: err.code, message: err.message, details: err.details ?? {} });
+    // ApiError.message defaults to its code when the throw site didn't pass one (`super(message || code)`);
+    // omit it here rather than send the raw enum, so the frontend's friendly-message mapping isn't bypassed.
+    const message = err.message === err.code ? undefined : err.message;
+    return res.status(err.status).json({ error: err.code, message, details: err.details ?? {} });
   }
 
   if (err instanceof MulterError && err.code === "LIMIT_FILE_SIZE") {

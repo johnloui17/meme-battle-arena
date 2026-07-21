@@ -162,6 +162,9 @@ Base path `/api/v1`. Error envelope, pagination envelope, snake_case, and the to
 |---|---|---|
 | `POST /auth/register` | — | `{ email, password, display_name }` → auto-login response |
 | `POST /auth/login` | — | → `{ access_token, user }` + HTTP-only refresh cookie |
+| `POST /auth/google` | — | `{ code }` (GIS popup auth-code flow) → same response as login; creates or links a user by verified Google email |
+| `POST /auth/password/forgot` | — | `{ email }` → always `{ sent: true }` (no user enumeration); emails a 60min single-use reset link when the account exists |
+| `POST /auth/password/reset` | — | `{ token, password }` → `{ reset: true }`; revokes all of the user's refresh tokens |
 | `POST /auth/token/refresh` | cookie | rotate refresh token, new `access_token` |
 | `POST /auth/logout` | cookie | revoke + clear cookie |
 | `POST /memes` | ✅ | `multipart/form-data`: `title`, `image` → 201 Meme |
@@ -212,6 +215,8 @@ FORBIDDEN                   403   NOT_FOUND                                     
 FILE_TOO_LARGE              413   UNSUPPORTED_FILE_TYPE                          415
 NOT_ENOUGH_MEMES            409   MATCHUP_NOT_PENDING (voted/expired/not yours)  409
 INVALID_WINNER (id not in matchup) 400          INTERNAL_ERROR                   500
+OAUTH_FAILED (Google exchange/verify failed, or unconfigured) 401/500
+RESET_TOKEN_INVALID (missing/expired/already-used reset token) 400
 ```
 
 ---
@@ -294,6 +299,12 @@ The `UNIQUE` constraint on `votes.matchup_id` is the last line of defense agains
 ### 7.4 Env (`config/env.ts`, validated at boot)
 
 `PORT`, `WEB_ORIGIN`, `DATABASE_URL`, `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, `UPLOADS_DIR`, `NODE_ENV`.
+
+Optional, feature-gating vars — each is safe to omit entirely in dev:
+- `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` — unset means "Continue with Google" is off: the frontend hides the button (it checks its own `NEXT_PUBLIC_GOOGLE_CLIENT_ID`), and `POST /auth/google` would 500 `OAUTH_FAILED` if called anyway.
+- `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` / `MAIL_FROM` — unset means password-reset emails are logged (via pino) instead of sent — the "console mailer" dev default. `MAIL_FROM` has a default even with no SMTP host configured.
+
+**Known gap:** `POST /auth/password/forgot` has no rate limiting (nothing in the app does today) — acceptable for a learning project, but a real deployment would want per-IP/per-email throttling on this endpoint specifically, since it triggers an email send.
 
 ---
 

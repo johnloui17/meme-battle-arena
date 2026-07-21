@@ -9,6 +9,15 @@ const envSchema = z.object({
   JWT_ACCESS_SECRET: z.string().min(1),
   JWT_REFRESH_SECRET: z.string().min(1),
   UPLOADS_DIR: z.string().min(1).default("./uploads"),
+  // Google sign-in — unset means the feature is off (frontend hides the button, backend 500s OAUTH_FAILED)
+  GOOGLE_CLIENT_ID: z.string().min(1).optional(),
+  GOOGLE_CLIENT_SECRET: z.string().min(1).optional(),
+  // SMTP — unset means password-reset emails are logged instead of sent ("console mailer")
+  SMTP_HOST: z.string().min(1).optional(),
+  SMTP_PORT: z.coerce.number().optional(),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
+  MAIL_FROM: z.string().default("Meme Battle Arena <no-reply@meme-battle-arena.local>"),
 });
 
 const parsed = envSchema.safeParse(process.env);

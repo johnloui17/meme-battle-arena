@@ -5,6 +5,9 @@ export const API_ENDPOINTS = {
   AUTH: {
     REGISTER: `${BASE_PATH}/auth/register`,
     LOGIN: `${BASE_PATH}/auth/login`,
+    GOOGLE: `${BASE_PATH}/auth/google`,
+    PASSWORD_FORGOT: `${BASE_PATH}/auth/password/forgot`,
+    PASSWORD_RESET: `${BASE_PATH}/auth/password/reset`,
     TOKEN_REFRESH: `${BASE_PATH}/auth/token/refresh`,
     LOGOUT: `${BASE_PATH}/auth/logout`,
   },
@@ -26,5 +29,8 @@ export const API_ENDPOINTS = {
 export const RETRY_EXCLUDED_ENDPOINTS: string[] = [
   API_ENDPOINTS.AUTH.LOGIN,
   API_ENDPOINTS.AUTH.REGISTER,
+  API_ENDPOINTS.AUTH.GOOGLE,
+  API_ENDPOINTS.AUTH.PASSWORD_FORGOT,
+  API_ENDPOINTS.AUTH.PASSWORD_RESET,
   API_ENDPOINTS.AUTH.TOKEN_REFRESH,
 ];
