@@ -1,9 +1,10 @@
-import { randomBytes, createHash } from "node:crypto";
+import { randomBytes } from "node:crypto";
 import jwt from "jsonwebtoken";
 import { ERROR_CODES } from "@meme-battle-arena/contracts";
 import { env } from "../../config/env";
 import { ApiError } from "../../lib/errors/api-error";
 import { pool } from "../../lib/db";
+import { hashToken } from "./auth.logic";
 
 const ACCESS_TOKEN_TTL = "15m";
 const REFRESH_TOKEN_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
@@ -11,10 +12,6 @@ const REFRESH_TOKEN_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 export interface AccessTokenPayload {
   sub: string;
   display_name: string;
-}
-
-function hashToken(token: string): string {
-  return createHash("sha256").update(token).digest("hex");
 }
 
 export const tokenService = {

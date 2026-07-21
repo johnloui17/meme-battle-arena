@@ -27,6 +27,17 @@ export const authService = {
     const response = await apiClient.post(API_ENDPOINTS.AUTH.LOGIN, data);
     return response.data;
   },
+  googleLogin: async (data: { code: string }): Promise<AuthResponse> => {
+    const response = await apiClient.post(API_ENDPOINTS.AUTH.GOOGLE, data);
+    return response.data;
+  },
+  forgotPassword: async (data: { email: string }): Promise<{ sent: boolean }> => {
+    const response = await apiClient.post(API_ENDPOINTS.AUTH.PASSWORD_FORGOT, data);
+    return response.data;
+  },
+  resetPassword: async (data: { token: string; password: string }): Promise<void> => {
+    await apiClient.post(API_ENDPOINTS.AUTH.PASSWORD_RESET, data);
+  },
   logout: async (): Promise<void> => {
     await apiClient.post(API_ENDPOINTS.AUTH.LOGOUT);
   },

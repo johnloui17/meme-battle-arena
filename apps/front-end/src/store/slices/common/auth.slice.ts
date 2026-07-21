@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, isAnyOf, type PayloadAction } from "@reduxjs/toolkit";
 import type { User } from "@/types/entities";
 import { authService, type LoginRequest, type RegisterRequest } from "@/lib/api/services/auth.service";
 import { saveAuthData, clearAuthData } from "@/lib/storage/auth-storage";
@@ -18,21 +18,41 @@ const initialState: AuthState = {
   error: null,
 };
 
-export const registerUser = createAsyncThunk("auth/register", async (data: RegisterRequest, { rejectWithValue }) => {
-  try {
-    return await authService.register(data);
-  } catch (error) {
-    return rejectWithValue(extractApiError(error).errorMessage);
-  }
-});
+/** true (persist to localStorage) unless the caller unchecked "keep me logged in". */
+type Remembered = { remember?: boolean };
 
-export const loginUser = createAsyncThunk("auth/login", async (data: LoginRequest, { rejectWithValue }) => {
-  try {
-    return await authService.login(data);
-  } catch (error) {
-    return rejectWithValue(extractApiError(error).errorMessage);
+export const registerUser = createAsyncThunk(
+  "auth/register",
+  async ({ email, password, display_name }: RegisterRequest & Remembered, { rejectWithValue }) => {
+    try {
+      return await authService.register({ email, password, display_name });
+    } catch (error) {
+      return rejectWithValue(extractApiError(error).errorMessage);
+    }
   }
-});
+);
+
+export const loginUser = createAsyncThunk(
+  "auth/login",
+  async ({ email, password }: LoginRequest & Remembered, { rejectWithValue }) => {
+    try {
+      return await authService.login({ email, password });
+    } catch (error) {
+      return rejectWithValue(extractApiError(error).errorMessage);
+    }
+  }
+);
+
+export const googleLoginUser = createAsyncThunk(
+  "auth/google",
+  async ({ code }: { code: string } & Remembered, { rejectWithValue }) => {
+    try {
+      return await authService.googleLogin({ code });
+    } catch (error) {
+      return rejectWithValue(extractApiError(error).errorMessage);
+    }
+  }
+);
 
 export const logoutUser = createAsyncThunk("auth/logout", async (_: void, { dispatch }) => {
   try {
@@ -61,27 +81,27 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addMatcher(isAnyOf(registerUser.pending, loginUser.pending, googleLoginUser.pending), (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
       .addMatcher(
-        (action): action is ReturnType<typeof registerUser.pending> | ReturnType<typeof loginUser.pending> =>
-          action.type === registerUser.pending.type || action.type === loginUser.pending.type,
-        (state) => {
-          state.status = "loading";
-          state.error = null;
-        }
-      )
-      .addMatcher(
-        (action): action is ReturnType<typeof registerUser.fulfilled> | ReturnType<typeof loginUser.fulfilled> =>
-          action.type === registerUser.fulfilled.type || action.type === loginUser.fulfilled.type,
+        isAnyOf(registerUser.fulfilled, loginUser.fulfilled, googleLoginUser.fulfilled),
         (state, action) => {
           state.status = "idle";
           state.accessToken = action.payload.access_token;
           state.user = action.payload.user;
-          saveAuthData({ accessToken: action.payload.access_token, user: action.payload.user });
+
+          const remember = action.meta.arg.remember ?? true;
+          if (remember) {
+            saveAuthData({ accessToken: action.payload.access_token, user: action.payload.user });
+          } else {
+            clearAuthData();
+          }
         }
       )
       .addMatcher(
-        (action): action is ReturnType<typeof registerUser.rejected> | ReturnType<typeof loginUser.rejected> =>
-          action.type === registerUser.rejected.type || action.type === loginUser.rejected.type,
+        isAnyOf(registerUser.rejected, loginUser.rejected, googleLoginUser.rejected),
         (state, action) => {
           state.status = "error";
           state.error = (action.payload as string) || "Something went wrong. Please try again.";

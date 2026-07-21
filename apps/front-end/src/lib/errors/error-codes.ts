@@ -9,6 +9,8 @@ const FRIENDLY_MESSAGES: Partial<Record<string, string>> = {
   [ERROR_CODES.TOKEN_INVALID]: "Your session is invalid. Please log in again.",
   [ERROR_CODES.EMAIL_TAKEN]: "An account with this email already exists.",
   [ERROR_CODES.INVALID_CREDENTIALS]: "Incorrect email or password.",
+  [ERROR_CODES.OAUTH_FAILED]: "Google sign-in failed. Please try again.",
+  [ERROR_CODES.RESET_TOKEN_INVALID]: "That reset link is invalid or has expired.",
   [ERROR_CODES.NOT_FOUND]: "We couldn't find what you were looking for.",
   [ERROR_CODES.INTERNAL_ERROR]: "Something went wrong. Please try again.",
 };

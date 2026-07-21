@@ -29,6 +29,7 @@ html[data-theme="dark"] {
   --mba-gold-deep: #b9791e;
   --mba-silver: #c9b79a;
   --mba-bronze: #d2795a;
+  --mba-err: #e85c5c;
   --mba-text-hi: #f6ecd9;
   --mba-text-mid: #c9b79a;
   --mba-text-dim: #8a7758;
@@ -54,6 +55,7 @@ html[data-theme="light"] {
   --mba-gold-deep: #8f5c14;
   --mba-silver: #c9b79a;
   --mba-bronze: #d2795a;
+  --mba-err: #e85c5c;
   --mba-text-hi: #2b1b10;
   --mba-text-mid: #5c4630;
   --mba-text-dim: #8a7758;
@@ -79,6 +81,7 @@ html[data-theme="light"] {
   --color-mba-gold-deep: var(--mba-gold-deep);
   --color-mba-silver: var(--mba-silver);
   --color-mba-bronze: var(--mba-bronze);
+  --color-mba-err: var(--mba-err);
   --color-mba-text-hi: var(--mba-text-hi);
   --color-mba-text-mid: var(--mba-text-mid);
   --color-mba-text-dim: var(--mba-text-dim);
