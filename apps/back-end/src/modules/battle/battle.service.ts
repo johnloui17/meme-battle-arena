@@ -29,8 +29,8 @@ export const battleService = {
 
     // Reuse meme.service's existing Meme JOIN/shape rather than duplicating it here.
     const [fullMemeA, fullMemeB] = await Promise.all([
-      memeService.get(matchup.meme_a_id),
-      memeService.get(matchup.meme_b_id),
+      memeService.get(matchup.meme_a_id, userId),
+      memeService.get(matchup.meme_b_id, userId),
     ]);
 
     return {
