@@ -7,13 +7,14 @@ import type { RootState } from "@/store";
 import { cn } from "@/lib/utils";
 import { applyTheme, getStoredTheme, DEFAULT_THEME, type MbaTheme } from "@/lib/theme";
 
-export type SiteHeaderNavItem = "arena" | "upload" | "leaderboard" | "my-memes";
+export type SiteHeaderNavItem = "arena" | "upload" | "leaderboard" | "my-memes" | "feed";
 
 const NAV_LINKS: { label: string; href: string; item: SiteHeaderNavItem }[] = [
   { label: "Arena", href: "/arena", item: "arena" },
   { label: "Upload", href: "/upload", item: "upload" },
   { label: "Leaderboard", href: "/leaderboard", item: "leaderboard" },
   { label: "My Memes", href: "/my-memes", item: "my-memes" },
+  { label: "Feed", href: "/feed", item: "feed" },
 ];
 
 interface SiteHeaderProps {

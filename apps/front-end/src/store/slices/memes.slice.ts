@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { Meme, PaginatedResponse } from "@meme-battle-arena/contracts";
+import type { Meme, MemeSort, PaginatedResponse } from "@meme-battle-arena/contracts";
 import { memeService, type ListMemesFilters, type UploadMemeData } from "@/lib/api/services/meme.service";
 import { extractApiError } from "@/lib/errors";
 import { isCacheValid, listParamsMatch } from "@/lib/cache";
 
 interface MemesFilters {
   uploaderMe: boolean;
-  sort: "newest" | "rating";
+  sort: MemeSort;
   page: number;
   pageSize: number;
 }
@@ -16,6 +16,7 @@ interface MemesState {
     data: Meme[];
     pagination: PaginatedResponse<Meme>["pagination"] | null;
     isLoading: boolean;
+    isLoadingMore: boolean;
     error: string | null;
     lastFetched: number | null;
     lastListParams: ListMemesFilters | null;
@@ -35,6 +36,7 @@ const initialState: MemesState = {
     data: [],
     pagination: null,
     isLoading: false,
+    isLoadingMore: false,
     error: null,
     lastFetched: null,
     lastListParams: null,
@@ -91,6 +93,33 @@ export const refreshMemes = createAsyncThunk(
   }
 );
 
+/** Fetches the next page and APPENDS it — cache/replace semantics stay with fetchMemes. */
+export const loadMoreMemes = createAsyncThunk(
+  "memes/loadMoreMemes",
+  async (_: void, { getState, rejectWithValue }) => {
+    try {
+      const { list } = (getState() as { memes: MemesState }).memes;
+      if (!list.pagination) return rejectWithValue("No list loaded yet");
+      const filters: ListMemesFilters = { ...toFilters(list.filters), page: list.pagination.page + 1 };
+      const response = await memeService.list(filters);
+      return { data: response.data, pagination: response.pagination };
+    } catch (error) {
+      return rejectWithValue(extractApiError(error).errorMessage);
+    }
+  }
+);
+
+export const toggleReaction = createAsyncThunk(
+  "memes/toggleReaction",
+  async ({ memeId, reacted }: { memeId: string; reacted: boolean }, { rejectWithValue }) => {
+    try {
+      return reacted ? await memeService.unreact(memeId) : await memeService.react(memeId);
+    } catch (error) {
+      return rejectWithValue(extractApiError(error).errorMessage);
+    }
+  }
+);
+
 export const uploadMeme = createAsyncThunk(
   "memes/uploadMeme",
   async (
@@ -130,6 +159,12 @@ const memesSlice = createSlice({
     clearMemeDetails(state) {
       state.details = initialState.details;
     },
+    /** Posting a comment is a direct service call (not a thunk — see feed's meme-modal), so the
+     * meme's comment_count in the shared list needs a manual bump to stay in sync. */
+    commentPosted(state, action: PayloadAction<string>) {
+      const meme = state.list.data.find((m) => m.id === action.payload);
+      if (meme) meme.comment_count += 1;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -157,9 +192,46 @@ const memesSlice = createSlice({
       })
       .addCase(deleteMeme.fulfilled, (state, action) => {
         state.list.data = state.list.data.filter((meme) => meme.id !== action.payload);
+      })
+      .addCase(loadMoreMemes.pending, (state) => {
+        state.list.isLoadingMore = true;
+        state.list.error = null;
+      })
+      .addCase(loadMoreMemes.fulfilled, (state, action) => {
+        state.list.isLoadingMore = false;
+        const known = new Set(state.list.data.map((meme) => meme.id));
+        state.list.data.push(...action.payload.data.filter((meme) => !known.has(meme.id)));
+        state.list.pagination = action.payload.pagination;
+        // lastListParams/lastFetched stay put: the accumulated list is what the cache re-serves.
+      })
+      .addCase(loadMoreMemes.rejected, (state, action) => {
+        state.list.isLoadingMore = false;
+        state.list.error = (action.payload as string) || "Failed to load more memes";
+      })
+      .addCase(toggleReaction.pending, (state, action) => {
+        const { memeId, reacted } = action.meta.arg;
+        const meme = state.list.data.find((m) => m.id === memeId);
+        if (!meme) return;
+        meme.reacted_by_me = !reacted;
+        meme.reaction_count += reacted ? -1 : 1;
+      })
+      .addCase(toggleReaction.fulfilled, (state, action) => {
+        const { memeId } = action.meta.arg;
+        const meme = state.list.data.find((m) => m.id === memeId);
+        if (!meme) return;
+        meme.reaction_count = action.payload.reaction_count;
+        meme.reacted_by_me = action.payload.reacted_by_me;
+      })
+      .addCase(toggleReaction.rejected, (state, action) => {
+        const { memeId, reacted } = action.meta.arg;
+        const meme = state.list.data.find((m) => m.id === memeId);
+        if (!meme) return;
+        // revert the optimistic flip from .pending
+        meme.reacted_by_me = reacted;
+        meme.reaction_count += reacted ? 1 : -1;
       });
   },
 });
 
-export const { setFilters, setPage, clearMemesData, clearMemeDetails } = memesSlice.actions;
+export const { setFilters, setPage, clearMemesData, clearMemeDetails, commentPosted } = memesSlice.actions;
 export default memesSlice.reducer;

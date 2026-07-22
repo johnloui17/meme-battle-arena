@@ -14,7 +14,21 @@ export interface Meme {
   losses: number;
   uploader: { id: string; display_name: string };
   created_at: string;
+  reaction_count: number;
+  /** whether the requesting user has reacted to this meme */
+  reacted_by_me: boolean;
+  comment_count: number;
 }
+
+export interface MemeComment {
+  id: string;
+  meme_id: string;
+  body: string;
+  author: { id: string; display_name: string };
+  created_at: string;
+}
+
+export type MemeSort = "newest" | "rating" | "most_reacted" | "most_commented";
 
 export interface Matchup {
   id: string;

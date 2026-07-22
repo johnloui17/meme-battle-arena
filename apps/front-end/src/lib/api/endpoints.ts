@@ -15,6 +15,9 @@ export const API_ENDPOINTS = {
     LIST: `${BASE_PATH}/memes`,
     CREATE: `${BASE_PATH}/memes`,
     BY_ID: (id: string) => `${BASE_PATH}/memes/${id}`,
+    REACTIONS: (id: string) => `${BASE_PATH}/memes/${id}/reactions`,
+    COMMENTS: (id: string) => `${BASE_PATH}/memes/${id}/comments`,
+    COMMENT_BY_ID: (id: string, commentId: string) => `${BASE_PATH}/memes/${id}/comments/${commentId}`,
   },
   BATTLES: {
     NEXT: `${BASE_PATH}/battles/next`,
